@@ -23,6 +23,8 @@ export default function EntryForm({ entry, onSubmit }) {
     onSubmit();
   }
 
+
+
   function handleDelete() {
     removeEntry(entry.entryId);
     onSubmit();

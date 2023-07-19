@@ -27,6 +27,28 @@ app.get('/api/entries', async (req, res, next) => {
   }
 });
 
+app.post('/api/entries', async (req, res, next) => {
+  try {
+    const {title, notes, photoUrl } = req.body;
+    if ( !title || !notes || !photoUrl) {
+      res.status(400).json({ error: 'The grade is invalid.' });
+            return;
+    }
+    const sql = `
+      insert into "entries" ("title", "notes", "photoUrl")
+        values ($1, $2, $3)
+        returning *
+    `;
+    const params = [title, notes, photoUrl];
+    const result = await db.query(sql, params);
+    const [grade] = result.rows;
+    res.status(201).json(grade);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An unexpected error occured.' });
+  }
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`express server listening on port ${process.env.PORT}`);
 });
