@@ -6,7 +6,7 @@ import { addEntry, removeEntry, updateEntry } from './data';
  * If `entry` is `null`, adds an entry.
  * If `entry` is defined, edits that entry.
  */
-export default function EntryForm({ entry, onSubmit }) {
+export default function EntryForm({ entry, onSubmit, onDelete }) {
   const [title, setTitle] = useState(entry?.title ?? '');
   const [photoUrl, setPhotoUrl] = useState(entry?.photoUrl ?? '');
   const [notes, setNotes] = useState(entry?.notes ?? '');
@@ -23,10 +23,10 @@ export default function EntryForm({ entry, onSubmit }) {
     onSubmit(newEntry);
   }
 
-  function handleDelete() {
-    removeEntry(entry.entryId);
-    onSubmit();
-  }
+  // function handleDelete() {
+  //   removeEntry(entry.entryId);
+  //   onSubmit();
+  // }
 
   return (
     <div className="container">
@@ -114,7 +114,7 @@ export default function EntryForm({ entry, onSubmit }) {
               </button>
               <button
                 className="modal-button red-background white-text"
-                onClick={handleDelete}>
+                onClick={() => onDelete({ entry })}>
                 Confirm
               </button>
             </div>

@@ -50,6 +50,70 @@ app.post('/api/entries', async (req, res, next) => {
   }
 });
 
+app.put('/api/entries/:entryId', async (req, res, next) => {
+  try {
+    const entryId = Number(req.params.gradeId);
+    const { title, notes, photoUrl } = req.body;
+    if (!title || !notes || !photoUrl) {
+      res.status(400).json({ error: 'The grade is invalid.' });
+      return;
+    }
+    if (entryId < 1) {
+      res.status(400).json({ error: 'gradeId must be a positive integer' });
+      return;
+    }
+    const sql = `
+      update "entries"
+        set "title" = $1,
+            "notes" = $2,
+            "photoUrl" = $3
+        where "entryId" = $4
+        returning *
+    `;
+    const params = [title, notes, photoUrl, entryId];
+    const result = await db.query(sql, params);
+    const [entry] = result.rows;
+    if (entry) {
+      res.status(201).json(entry);
+    } else {
+      res
+        .status(404)
+        .json({ error: `Cannot find grade with entryId ${entryId}` });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An unexpected error occured.' });
+  }
+});
+
+app.delete('/api/entries/:entryId', async (req, res, next) => {
+  try {
+    const entryId = Number(req.params.gradeId);
+    if (entryId < 1) {
+      res.status(400).json({ error: 'gradeId must be a positive integer' });
+      return;
+    }
+    const sql = `
+      delete "entries"
+        where "entryId" = $1
+        returning *
+    `;
+    const params = [entryId];
+    const result = await db.query(sql, params);
+    const [entry] = result.rows[0];
+    if (entry) {
+      res.status(204).json(entry);
+    } else {
+      res
+        .status(404)
+        .json({ error: `Cannot find grade with entryId ${entryId}` });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An unexpected error occured.' });
+  }
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`express server listening on port ${process.env.PORT}`);
 });

@@ -77,6 +77,21 @@ export default function App() {
     }
   }
 
+  async function handleDelete(entry) {
+    try {
+      const response = await fetch(`/api/entries/${editing.entryId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      setEditing(undefined);
+      if (!response.ok) {
+        throw new Error(`fetch Error ${response.status}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -92,7 +107,11 @@ export default function App() {
     <>
       <NavBar onEntries={() => setEditing(undefined)} />
       {editing !== undefined && (
-        <EntryForm entry={editing} onSubmit={addEntry} />
+        <EntryForm
+          entry={editing}
+          onSubmit={editing === undefined ? editEntry : addEntry}
+          onDelete={handleDelete}
+        />
       )}
       {editing === undefined && (
         <EntryList

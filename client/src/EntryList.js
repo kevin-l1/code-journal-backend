@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react';
-import { readEntries } from './data';
-
 export default function EntryList({ onCreate, onEdit, entries }) {
   return (
     <div className="container">
