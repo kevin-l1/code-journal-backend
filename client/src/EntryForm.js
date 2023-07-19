@@ -20,10 +20,8 @@ export default function EntryForm({ entry, onSubmit }) {
     } else {
       addEntry(newEntry);
     }
-    onSubmit();
+    onSubmit(newEntry);
   }
-
-
 
   function handleDelete() {
     removeEntry(entry.entryId);

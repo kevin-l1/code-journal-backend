@@ -19,6 +19,7 @@ app.get('/api/entries', async (req, res, next) => {
     const sql = `
       select *
         from "entries"
+        order by "entryId" desc
     `;
     const result = await db.query(sql);
     res.json(result.rows);
@@ -29,10 +30,10 @@ app.get('/api/entries', async (req, res, next) => {
 
 app.post('/api/entries', async (req, res, next) => {
   try {
-    const {title, notes, photoUrl } = req.body;
-    if ( !title || !notes || !photoUrl) {
+    const { title, notes, photoUrl } = req.body;
+    if (!title || !notes || !photoUrl) {
       res.status(400).json({ error: 'The grade is invalid.' });
-            return;
+      return;
     }
     const sql = `
       insert into "entries" ("title", "notes", "photoUrl")

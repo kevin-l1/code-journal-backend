@@ -21,24 +21,23 @@ export function addEntry(entry) {
   entry.entryId = data.nextEntryId++;
   data.entries.unshift(entry);
 
-    async function addTodo(newTodo) {
-    try {
-      const response = await fetch('/api/todos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTodo),
-      });
-      const result = await response.json();
-      const array = data.entries.concat(entry);
-      setTodos(array);
-      console.log(newTodo);
-    } catch (error) {
+  //   async function addTodo(newTodo) {
+  //   try {
+  //     const response = await fetch('/api/todos', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(newTodo),
+  //     });
+  //     const result = await response.json();
+  //     const array = data.entries.concat(entry);
+  //     setTodos(array);
+  //     console.log(newTodo);
+  //   } catch (error) {
 
-    }
-  }
-
+  //   }
+  // }
 }
 
 export function updateEntry(entry) {

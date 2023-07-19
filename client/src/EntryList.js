@@ -1,38 +1,7 @@
 import { useState, useEffect } from 'react';
 import { readEntries } from './data';
 
-export default function EntryList({ onCreate, onEdit }) {
-  const [entries, setEntries] = useState([]);
-  const [isLoading, setIsLoading] = useState();
-  const [error, setError] = useState();
-
-  useEffect(() => {
-    async function fetchEntries() {
-      try {
-        const res = await fetch('./api/entries');
-        if (!res.ok) throw new Error(`fetch error ${res.status}`);
-        const entries = await res.json();
-        setEntries(entries);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchEntries();
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    console.error('Fetch error:', error);
-    return (
-      <div>
-        Error! {error instanceof Error ? error.message : 'Unknown error'}
-      </div>
-    );
-  }
+export default function EntryList({ onCreate, onEdit, entries }) {
   return (
     <div className="container">
       <div className="row">
