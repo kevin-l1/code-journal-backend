@@ -50,6 +50,33 @@ export default function App() {
     }
   }
 
+  async function editEntry(entry) {
+    // let pastEntry = entryId.find((entry) => entry.entryId === entryId);
+    try {
+      const { title, notes, photoUrl } = entry;
+      const editedEntry = { title: title, notes: notes, photoUrl: photoUrl };
+
+      const response = await fetch(`/api/entries/${editing.entryId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editedEntry),
+      });
+      if (!response.ok) {
+        throw new Error(`fetch Error ${response.status}`);
+      }
+      const result = await response.json();
+      console.log(result);
+      const allEntries = entries.map((original) =>
+        original.entryId === result.entryId ? result : original
+      );
+      console.log(allEntries);
+      setEntries(allEntries);
+      setEditing(undefined);
+    } catch (error) {
+      setError(error);
+    }
+  }
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
